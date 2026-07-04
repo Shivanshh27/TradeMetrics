@@ -60,7 +60,7 @@ export default function EquityCurveChart({ userId }) {
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={data} margin={{ top: 10, right: 10, left: 10, bottom: 0 }}>
-        <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.05)" vertical={false} />
+        <CartesianGrid strokeDasharray="3 3" stroke="rgba(0,0,0,0.06)" vertical={false} />
         <XAxis 
           dataKey="exit_time" 
           tickFormatter={(t) => new Date(t).toLocaleDateString(undefined, {month: 'short', day: 'numeric'})} 

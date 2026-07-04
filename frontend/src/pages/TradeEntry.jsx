@@ -19,14 +19,14 @@ export default function TradeEntry() {
         </p>
       </div>
 
-      <div className="dashboard-grid">
-        {/* Left Side: Trade Entry Form */}
-        <div className="glass-panel col-4" style={{ height: 'fit-content' }}>
+      <div>
+        {/* Top Side: Trade Entry Form */}
+        <div className="glass-panel" style={{ height: 'fit-content', marginBottom: '24px' }}>
           <TradeForm userId={userId} onSaved={handleSaved} />
         </div>
 
-        {/* Right Side: Trade Log and Filters */}
-        <div className="glass-panel col-8">
+        {/* Bottom Side: Trade Log and Filters */}
+        <div className="glass-panel">
           <h3 style={{ marginBottom: '16px' }} className="title-underline">Execution Log</h3>
           <TradeLog userId={userId} refreshTrigger={refreshTrigger} />
         </div>

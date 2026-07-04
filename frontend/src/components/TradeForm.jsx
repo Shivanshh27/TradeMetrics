@@ -15,7 +15,8 @@ export default function TradeForm({ userId, onSaved }) {
     entryPrice: '',
     exitPrice: '',
     entryTime: '',
-    exitTime: ''
+    exitTime: '',
+    description: ''
   };
 
   const [form, setForm] = useState(initialFormState);
@@ -59,7 +60,8 @@ export default function TradeForm({ userId, onSaved }) {
         entryPrice: parseFloat(form.entryPrice),
         exitPrice: parseFloat(form.exitPrice),
         entryTime: new Date(form.entryTime).toISOString(),
-        exitTime: new Date(form.exitTime).toISOString()
+        exitTime: new Date(form.exitTime).toISOString(),
+        description: form.description.trim()
       };
 
       await api.post('/trades', payload);
@@ -109,7 +111,7 @@ export default function TradeForm({ userId, onSaved }) {
         </div>
       )}
 
-      <div className="form-row">
+      <div className="form-grid">
         <div className="form-group">
           <label htmlFor="strategyId">Strategy</label>
           <select 
@@ -133,9 +135,7 @@ export default function TradeForm({ userId, onSaved }) {
             placeholder="e.g. NIFTY"
           />
         </div>
-      </div>
 
-      <div className="form-row">
         <div className="form-group">
           <label htmlFor="side">Side</label>
           <select 
@@ -160,9 +160,7 @@ export default function TradeForm({ userId, onSaved }) {
             placeholder="e.g. 50"
           />
         </div>
-      </div>
 
-      <div className="form-row">
         <div className="form-group">
           <label htmlFor="entryPrice">Entry Price (₹)</label>
           <input 
@@ -188,28 +186,39 @@ export default function TradeForm({ userId, onSaved }) {
             placeholder="e.g. 19620.00"
           />
         </div>
-      </div>
 
-      <div className="form-group">
-        <label htmlFor="entryTime">Entry Date & Time</label>
-        <input 
-          id="entryTime"
-          name="entryTime" 
-          type="datetime-local" 
-          value={form.entryTime} 
-          onChange={handleChange} 
-        />
-      </div>
+        <div className="form-group">
+          <label htmlFor="entryTime">Entry Date & Time</label>
+          <input 
+            id="entryTime"
+            name="entryTime" 
+            type="datetime-local" 
+            value={form.entryTime} 
+            onChange={handleChange} 
+          />
+        </div>
 
-      <div className="form-group">
-        <label htmlFor="exitTime">Exit Date & Time</label>
-        <input 
-          id="exitTime"
-          name="exitTime" 
-          type="datetime-local" 
-          value={form.exitTime} 
-          onChange={handleChange} 
-        />
+        <div className="form-group">
+          <label htmlFor="exitTime">Exit Date & Time</label>
+          <input 
+            id="exitTime"
+            name="exitTime" 
+            type="datetime-local" 
+            value={form.exitTime} 
+            onChange={handleChange} 
+          />
+        </div>
+        <div className="form-group" style={{ gridColumn: '1 / -1' }}>
+          <label htmlFor="description">Notes / Description</label>
+          <textarea 
+            id="description"
+            name="description" 
+            value={form.description} 
+            onChange={handleChange} 
+            placeholder="Enter trade setup notes, mistakes, key learnings..."
+            rows="2"
+          />
+        </div>
       </div>
 
       <button type="submit" disabled={loading} style={{ marginTop: '10px' }}>

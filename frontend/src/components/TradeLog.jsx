@@ -42,6 +42,38 @@ export default function TradeLog({ userId, refreshTrigger }) {
     fetchTrades();
   }, [userId, refreshTrigger]);
 
+  const [activeTradeForNotes, setActiveTradeForNotes] = useState(null);
+  const [editedNotesText, setEditedNotesText] = useState('');
+  const [savingNotes, setSavingNotes] = useState(false);
+
+  const openNotesModal = (trade) => {
+    setActiveTradeForNotes(trade);
+    setEditedNotesText(trade.description || '');
+  };
+
+  const handleSaveNotes = async () => {
+    if (!activeTradeForNotes) return;
+    setSavingNotes(true);
+    try {
+      await api.put(`/trades/${activeTradeForNotes.id}/description`, {
+        description: editedNotesText.trim()
+      });
+      // Update local state instantly
+      setTrades(prev => prev.map(t => {
+        if (t.id === activeTradeForNotes.id) {
+          return { ...t, description: editedNotesText.trim() };
+        }
+        return t;
+      }));
+      setActiveTradeForNotes(null);
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.error || 'Failed to save notes.');
+    } finally {
+      setSavingNotes(false);
+    }
+  };
+
   const handleReset = () => {
     setStrategyId('');
     setSymbol('');
@@ -133,13 +165,14 @@ export default function TradeLog({ userId, refreshTrigger }) {
                 <th>Strategy</th>
                 <th>Entry Time</th>
                 <th>Exit Time</th>
+                <th>Notes</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {trades.length === 0 ? (
                 <tr>
-                  <td colSpan="10" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '30px' }}>
+                  <td colSpan="11" style={{ textAlign: 'center', color: 'var(--text-muted)', padding: '30px' }}>
                     No trades match the filters.
                   </td>
                 </tr>
@@ -166,6 +199,21 @@ export default function TradeLog({ userId, refreshTrigger }) {
                       </td>
                       <td>{new Date(trade.entry_time).toLocaleString()}</td>
                       <td>{new Date(trade.exit_time).toLocaleString()}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <button 
+                          onClick={() => openNotesModal(trade)}
+                          className={`note-icon-btn ${trade.description ? 'has-notes' : ''}`}
+                          title={trade.description ? 'View/Edit Notes' : 'Add Notes'}
+                        >
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                            <line x1="16" y1="13" x2="8" y2="13"></line>
+                            <line x1="16" y1="17" x2="8" y2="17"></line>
+                            <polyline points="10 9 9 9 8 9"></polyline>
+                          </svg>
+                        </button>
+                      </td>
                       <td>
                         <button
                           onClick={() => handleDelete(trade.id)}
@@ -200,6 +248,50 @@ export default function TradeLog({ userId, refreshTrigger }) {
               )}
             </tbody>
           </table>
+        </div>
+      )}
+
+      {/* Edit Notes Modal */}
+      {activeTradeForNotes && (
+        <div className="modal-overlay" onClick={() => setActiveTradeForNotes(null)}>
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Notes — {activeTradeForNotes.symbol} ({activeTradeForNotes.side})</h3>
+              <button className="modal-close-btn" onClick={() => setActiveTradeForNotes(null)}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label htmlFor="modalNotes">Write trade notes / learnings:</label>
+              <textarea
+                id="modalNotes"
+                value={editedNotesText}
+                onChange={(e) => setEditedNotesText(e.target.value)}
+                placeholder="Mistakes, observations, strategy alignment, key learnings..."
+                rows="6"
+                style={{ marginTop: '8px' }}
+              />
+            </div>
+            <div className="modal-footer">
+              <button 
+                className="btn-secondary" 
+                onClick={() => setActiveTradeForNotes(null)}
+                style={{ padding: '10px 18px' }}
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={handleSaveNotes} 
+                disabled={savingNotes}
+                style={{ padding: '10px 18px' }}
+              >
+                {savingNotes ? 'Saving...' : 'Save Notes'}
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>
