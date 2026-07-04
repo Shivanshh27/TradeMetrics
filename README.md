@@ -289,5 +289,16 @@ WHERE user_id = 1 AND exit_time > '2026-06-25';
 
 ---
 
+## 👨‍💻 Author & Connect
+
+**Shivansh Nigam**
+* **Email**: [s2704nigam@gmail.com](mailto:s2704nigam@gmail.com)
+* **GitHub**: [shivanshh27](https://github.com/shivanshh27)
+* **LinkedIn**: [shivanshh27](https://linkedin.com/in/shivanshh27)
+
+Feel free to connect or reach out for discussions regarding database design, SQL optimization, or full-stack web development!
+
+---
+
 ## 📄 License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
