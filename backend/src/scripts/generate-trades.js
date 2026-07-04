@@ -32,10 +32,12 @@ async function seed(count = 3000) {
       const strategyId = STRATEGY_IDS[Math.floor(Math.random() * STRATEGY_IDS.length)];
       const symbol = SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
 
+      const description = `Auto-generated test trade for strategy ID ${strategyId}. Setup looks clean.`;
+
       await client.query(
-        `INSERT INTO trades (user_id, strategy_id, symbol, side, qty, entry_price, exit_price, entry_time, exit_time)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)`,
-        [1, strategyId, symbol, side, qty, basePrice.toFixed(2), (basePrice + move).toFixed(2), entryTime, exitTime]
+        `INSERT INTO trades (user_id, strategy_id, symbol, side, qty, entry_price, exit_price, entry_time, exit_time, description)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)`,
+        [1, strategyId, symbol, side, qty, basePrice.toFixed(2), (basePrice + move).toFixed(2), entryTime, exitTime, description]
       );
     }
     await client.query('COMMIT;');

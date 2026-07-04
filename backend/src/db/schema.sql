@@ -22,7 +22,8 @@ CREATE TABLE trades (
   exit_price NUMERIC NOT NULL,
   entry_time TIMESTAMP NOT NULL,
   exit_time TIMESTAMP NOT NULL,
-  pnl NUMERIC
+  pnl NUMERIC,
+  description TEXT
 );
 
 -- Trigger: auto-compute P&L on insert
