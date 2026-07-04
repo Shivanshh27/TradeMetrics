@@ -1,0 +1,18 @@
+{
+  "name": "trademetrics-backend",
+  "version": "1.0.0",
+  "description": "Backend API for TradeMetrics",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "seed": "node src/scripts/generate-trades.js",
+    "db:setup": "node src/db/setup-db.js",
+    "db:clean": "node src/scripts/clean-trades.js"
+  },
+  "dependencies": {
+    "express": "^4.19.0",
+    "pg": "^8.11.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.0"
+  }
+}
